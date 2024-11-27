@@ -147,6 +147,7 @@
   color: #7a7a7a;
   line-height: 1.8;
   font-size: 18px;
+  text-align: justify;
 }
 .img2{
   height: 250px;
@@ -322,5 +323,8 @@
     .footer{
       flex-direction: column;
       justify-content: center;
+    }
+    .nav-link:hover{
+      color: #000000 !important;
     }
   }
