@@ -288,7 +288,7 @@
         "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
         "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
         "Detroit Pistons", "Golden State Warriors", "Houston Rockets", "Indiana Pacers",
-        "LA Clippers", "Los Angeles Lakers", "Memphis Grizzlies", "Miami Heat",
+        "Los Angeles Clippers", "Los Angeles Lakers", "Memphis Grizzlies", "Miami Heat",
         "Milwaukee Bucks", "Minnesota Timberwolves", "New Orleans Pelicans", "New York Knicks",
         "Oklahoma City Thunder", "Orlando Magic", "Philadelphia 76ers", "Phoenix Suns",
         "Portland Trail Blazers", "Sacramento Kings", "San Antonio Spurs", "Toronto Raptors",
@@ -481,63 +481,42 @@
         var awayName;
         var pointHome;
         var pointAway;
-        var probHome = (pointHome/pointHome+pointAway)*100
-        var probAway = (pointAway/pointHome+pointAway)*100
+        var homeSpread;
+        var awaySpread;
+        
+        
 
         $.ajax({
-            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb",
+            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=spreads",
             type: "GET",
             datatype: "JSON",
             success: function(data){
                 for (let i = 0; i <= data.length; i++) {
                     
                     if(data[i].home_team == team1 && data[i].away_team == team2){
-                        home = data[i].bookmakers[0].markets[0].outcomes[0].price;
-                        away = data[i].bookmakers[0].markets[0].outcomes[1].price;
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
                         homeName = team1;
                         awayName = team2;
-                        
-                        
 
-                        if(home > 0){
-                            pointHome = Math.round(100/(Math.abs(home)+100)*100)
-                        }else{
-                            pointHome = Math.round(Math.abs(home)/(Math.abs(home)+100)*100)
-                        }
-                        if(away > 0){
-                            pointAway = Math.round(100/(Math.abs(away)+100)*100)
-                        }else{
-                            pointAway = Math.round(Math.abs(away)/(Math.abs(away)+100)*100)
-                        }
                         break;
                     }
                     
 
                     
                     else if(data[i].home_team == team2 && data[i].away_team == team1){
-                        home = data[i].bookmakers[0].markets[0].outcomes[0].price;
-                        away = data[i].bookmakers[0].markets[0].outcomes[1].price;
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
                         homeName = team2;
                         awayName = team1;
-                        
 
-                        if(home > 0){
-                            pointHome = Math.round(100/(Math.abs(home)+100)*100)
-                        }else{
-                            pointHome = Math.round(Math.abs(home)/(Math.abs(home)+100)*100)
-                        }
-                        if(away > 0){
-                            pointAway = Math.round(100/(Math.abs(away)+100)*100)
-                        }else{
-                            pointAway = Math.round(Math.abs(away)/(Math.abs(away)+100)*100)
-                        }
                         break;
                     }
 
                     else{
                         console.log(data.length)
                         if(i+1 == data.length){
-                            window.alert("No matches")
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
                             break;
                         }
                         
@@ -548,6 +527,50 @@
         })
 
         
+
+        var totals;
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=totals",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+
 
         setTimeout(() => {
             const [team1Score, team2Score] = generateScore(currentLeague);
@@ -589,16 +612,16 @@
                 <div class="score-prediction">
                     <div class="team-score">
                         <strong>${homeName}</strong>
-                        <h2 id="sc1">${Math.round((pointHome/(pointHome+pointAway))*100)}%</h2>
+                        <h2 id="sc1">${Math.round((totals/2)+(homeSpread/2))}</h2>
                     </div>
                     <div class="vs-divider">VS</div>
                     <div class="team-score">
                         <strong>${awayName}</strong>
-                        <h2 id="sc2">${Math.round((pointAway/(pointHome+pointAway))*100)}%</h2>
+                        <h2 id="sc2">${Math.round((totals/2)+(awaySpread/2))}</h2>
                     </div>
                 </div>
                 <div class="total-score">
-                    <strong>Total Score: ${pointHome + pointAway}</strong>
+                    <strong>Total Score: ${Math.round(totals)}</strong>
                 </div>
             `;
             
