@@ -574,7 +574,7 @@
 
         setTimeout(() => {
             const [team1Score, team2Score] = generateScore(currentLeague);
-            const winner = homeProb > awayProb ? homeName : awayName;
+            const winner = Math.round((totals/2)+(homeSpread/2)) > Math.round((totals/2)+(awaySpread/2)) ? homeName : awayName;
             const confidence = Math.floor(Math.random() * 30 + 70);
             const socialInsight = getSocialInsights();
             const historicalInsight = getHistoricalData();
