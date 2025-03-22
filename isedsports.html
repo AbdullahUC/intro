@@ -248,12 +248,12 @@
         
         <div class="predictor">
             <div class="league-selector">
-                <button class="league-btn nba-btn" onclick="switchLeague('NBA')">NBA</button>
-                <button class="league-btn wnba-btn" onclick="switchLeague('WNBA')">WNBA</button>
-                <button class="league-btn nfl-btn" onclick="switchLeague('NFL')">NFL</button>
-                <button class="league-btn nhl-btn" onclick="switchLeague('NHL')">NHL</button>
-                <button class="league-btn mlb-btn" onclick="switchLeague('MLB')">MLB</button>
-                <button class="league-btn epl-btn" onclick="switchLeague('EPL')">EPL</button>
+                <button class="league-btn nba-btn" id="butn1" onclick="switchLeague('NBA'); sportName('nba')">NBA</button>
+                <button class="league-btn wnba-btn" id="butn2" onclick="switchLeague('WNBA'); sportName('wnba')">WNBA</button>
+                <button class="league-btn nfl-btn" id="butn3" onclick="switchLeague('NFL'); sportName('nfl')">NFL</button>
+                <button class="league-btn nhl-btn" id="butn4" onclick="switchLeague('NHL'); sportName('nhl')">NHL</button>
+                <button class="league-btn mlb-btn" id="butn5" onclick="switchLeague('MLB'); sportName('mlb')">MLB</button>
+                <button class="league-btn epl-btn" id="butn6" onclick="switchLeague('EPL'); sportName('epl')">EPL</button>
             </div>
             
     
@@ -284,6 +284,14 @@
     </div>
     
     <script>
+        
+        var sportNames;
+
+        function sportName(spn){
+            sportNames = spn;
+        } 
+
+
     const nbaTeams = [
         "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets",
         "Chicago Bulls", "Cleveland Cavaliers", "Dallas Mavericks", "Denver Nuggets",
@@ -319,7 +327,7 @@
         "Florida Panthers", "Los Angeles Kings", "Minnesota Wild", "Montreal Canadiens",
         "Nashville Predators", "New Jersey Devils", "New York Islanders", "New York Rangers",
         "Ottawa Senators", "Philadelphia Flyers", "Pittsburgh Penguins", "San Jose Sharks",
-        "Seattle Kraken", "St. Louis Blues", "Tampa Bay Lightning", "Toronto Maple Leafs",
+        "Seattle Kraken", "St. Louis Blues", "Tampa Bay Lightning", "Toronto Maple Leafs", "Utah Hockey Club",
         "Vancouver Canucks", "Vegas Golden Knights", "Washington Capitals", "Winnipeg Jets"
     ];
     
@@ -360,6 +368,7 @@
     function switchLeague(league) {
         currentLeague = league;
         let teams;
+        
         
         switch(league) {
             case 'NBA':
@@ -483,10 +492,13 @@
         var pointAway;
         var homeSpread;
         var awaySpread;
+        var totals;
+        
         
         
 
-        $.ajax({
+        if(sportNames == "nba" || sportNames == ""){
+            $.ajax({
             url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=spreads",
             type: "GET",
             datatype: "JSON",
@@ -498,6 +510,7 @@
                         awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
                         homeName = team1;
                         awayName = team2;
+                        console.log(sportNames)
 
                         break;
                     }
@@ -509,7 +522,7 @@
                         awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
                         homeName = team2;
                         awayName = team1;
-
+                        console.log(sportNames)
                         break;
                     }
 
@@ -525,10 +538,6 @@
                 } 
             }
         })
-
-        
-
-        var totals;
 
 
         $.ajax({
@@ -568,6 +577,106 @@
                 } 
             }
         })
+
+
+        }else if(sportNames == "wnba"){
+            window.alert("Data not available right now. Please try again later")
+        }else if(sportNames == "nfl"){
+            window.alert("Data not available right now. Please try again later")
+        }else if(sportNames == "nhl"){
+            $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=spreads",
+            type: "GET",
+            datatype: "JSON",
+            success: function(data){
+                for (let i = 0; i <= data.length; i++) {
+                    
+                    if(data[i].home_team == team1 && data[i].away_team == team2){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log(homeName, homeSpread, awayName, awaySpread)
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(data[i].home_team == team2 && data[i].away_team == team1){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log(homeName, homeSpread, awayName, awaySpread)
+                        break;
+                    }
+
+                    else{
+                        console.log(data.length)
+                        if(i+1 == data.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=totals",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log("NHL")
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log("NHL")
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+
+
+        }else if(sportNames == "mlb"){
+            window.alert("Data not available right now. Please try again later")
+        }else if(sportNames == "epl"){
+            window.alert("Data not available right now. Please try again later")
+        }
+        
+
 
 
 
@@ -621,7 +730,7 @@
                     </div>
                 </div>
                 <div class="total-score">
-                    <strong>Total Score: ${Math.round(totals)}</strong>
+                    <strong>Total Score: ${Math.round((totals/2)+(homeSpread/2)) + Math.round((totals/2)+(awaySpread/2))}</strong>
                 </div>
             `;
             
