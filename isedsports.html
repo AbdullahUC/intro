@@ -343,10 +343,10 @@
     ];
     
     const eplTeams = [
-        "Arsenal", "Aston Villa", "Brighton", "Burnley", "Chelsea", "Crystal Palace",
-        "Everton", "Fulham", "Liverpool", "Luton Town", "Manchester City", "Manchester United",
-        "Newcastle United", "Nottingham Forest", "Sheffield United", "Tottenham Hotspur",
-        "West Ham United", "Wolverhampton"
+        "Arsenal", "Aston Villa", "Brighton and Hove Albion", "Burnley", "Bournemouth", "Chelsea", "Crystal Palace",
+        "Everton", "Fulham", "Ipswich Town", "Liverpool", "Leicester City", "Luton Town", "Manchester City", "Manchester United",
+        "Newcastle United", "Nottingham Forest", "Sheffield United", "Southampton", "Tottenham Hotspur",
+        "West Ham United", "Wolverhampton Wanderers"
     ];
     
     let currentLeague = 'NBA';
@@ -497,9 +497,9 @@
         
         
 
-        if(sportNames == "nba" || sportNames == ""){
+        if(sportNames == "nba" || sportNames == undefined){
             $.ajax({
-            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=spreads",
+            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=spreads",
             type: "GET",
             datatype: "JSON",
             success: function(data){
@@ -541,7 +541,7 @@
 
 
         $.ajax({
-            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=totals",
+            url: "https://api.the-odds-api.com/v4/sports/basketball_nba/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=totals",
             type: "GET",
             datatype: "JSON",
             success: function(datas){
@@ -580,12 +580,172 @@
 
 
         }else if(sportNames == "wnba"){
-            window.alert("Data not available right now. Please try again later")
+            $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/basketball_wnba/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=spreads",
+            type: "GET",
+            datatype: "JSON",
+            success: function(data){
+                for (let i = 0; i <= data.length; i++) {
+                    
+                    if(data[i].home_team == team1 && data[i].away_team == team2){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log(sportNames)
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(data[i].home_team == team2 && data[i].away_team == team1){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log(sportNames)
+                        break;
+                    }
+
+                    else{
+                        console.log(data.length)
+                        if(i+1 == data.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/basketball_wnba/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=totals",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
         }else if(sportNames == "nfl"){
-            window.alert("Data not available right now. Please try again later")
+            $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=spreads",
+            type: "GET",
+            datatype: "JSON",
+            success: function(data){
+                for (let i = 0; i <= data.length; i++) {
+                    
+                    if(data[i].home_team == team1 && data[i].away_team == team2){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log(sportNames)
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(data[i].home_team == team2 && data[i].away_team == team1){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log(sportNames)
+                        break;
+                    }
+
+                    else{
+                        console.log(data.length)
+                        if(i+1 == data.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=totals",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
         }else if(sportNames == "nhl"){
             $.ajax({
-            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=spreads",
+            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=spreads",
             type: "GET",
             datatype: "JSON",
             success: function(data){
@@ -630,7 +790,7 @@
 
 
         $.ajax({
-            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=3f7872426e8a85a9dc52fb11664c0ecb&markets=totals",
+            url: "https://api.the-odds-api.com/v4/sports/icehockey_nhl/odds?regions=us&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8&markets=totals",
             type: "GET",
             datatype: "JSON",
             success: function(datas){
@@ -671,9 +831,167 @@
 
 
         }else if(sportNames == "mlb"){
-            window.alert("Data not available right now. Please try again later")
+            $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds?regions=us&markets=spreads&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8",
+            type: "GET",
+            datatype: "JSON",
+            success: function(data){
+                for (let i = 0; i <= data.length; i++) {
+                    
+                    if(data[i].home_team == team1 && data[i].away_team == team2){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log(sportNames)
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(data[i].home_team == team2 && data[i].away_team == team1){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log(sportNames)
+                        break;
+                    }
+
+                    else{
+                        console.log(data.length)
+                        if(i+1 == data.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/baseball_mlb/odds?regions=us&markets=totals&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
         }else if(sportNames == "epl"){
-            window.alert("Data not available right now. Please try again later")
+            $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/soccer_epl/odds?regions=us&markets=spreads&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8",
+            type: "GET",
+            datatype: "JSON",
+            success: function(data){
+                for (let i = 0; i <= data.length; i++) {
+                    
+                    if(data[i].home_team == team1 && data[i].away_team == team2){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team1;
+                        awayName = team2;
+                        console.log(sportNames)
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(data[i].home_team == team2 && data[i].away_team == team1){
+                        homeSpread = data[i].bookmakers[0].markets[0].outcomes[0].point;
+                        awaySpread = data[i].bookmakers[0].markets[0].outcomes[1].point;
+                        homeName = team2;
+                        awayName = team1;
+                        console.log(sportNames)
+                        break;
+                    }
+
+                    else{
+                        console.log(data.length)
+                        if(i+1 == data.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
+
+
+        $.ajax({
+            url: "https://api.the-odds-api.com/v4/sports/soccer_epl/odds?regions=us&markets=totals&oddsFormat=american&apiKey=73efcc7a2bdbcbd816606f05603564e8",
+            type: "GET",
+            datatype: "JSON",
+            success: function(datas){
+                for (let ii = 0; ii <= datas.length; ii++) {
+                    
+                    if(datas[ii].home_team == team1 && datas[ii].away_team == team2){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team1;
+                        awayName = team2;
+
+                        break;
+                    }
+                    
+
+                    
+                    else if(datas[ii].home_team == team2 && datas[ii].away_team == team1){
+                        totals = datas[ii].bookmakers[0].markets[0].outcomes[0].point;
+                        homeName = team2;
+                        awayName = team1;
+
+                        break;
+                    }
+
+                    else{
+                        console.log(datas.length)
+                        if(ii+1 == datas.length){
+                            window.alert("No matches scheduled between two selected teams. Try again later when data of these two teams are available")
+                            break;
+                        }
+                        
+                    }
+                    
+                } 
+            }
+        })
         }
         
 
