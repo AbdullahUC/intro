@@ -324,7 +324,84 @@
       flex-direction: column;
       justify-content: center;
     }
+
+
+
+
+
+
+
+
+.reviews-section {
+  padding: 60px 5%;
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.reviews-section h2 {
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+/* Carousel layout */
+.carousel-container {
+  position: relative;
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.carousel-track-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Review cards */
+.review-card {
+  flex: 0 0 50%;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.review-card img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  background: white;
+}
+
+/* Navigation buttons */
+.nav-btn {
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  font-size: 28px;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.nav-btn:hover {
+  background: black;
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+  .review-card {
+    flex: 0 0 100%;
+  }
+}
+
     .nav-link:hover{
       color: #000000 !important;
     }
   }
+
