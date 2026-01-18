@@ -34,6 +34,11 @@
     color: #ffffff !important;
   }
 
+.swiper{
+    width: 600px;
+    height: 300px;
+}
+
   .type {
     display:inline-block;
   }
@@ -404,4 +409,5 @@
       color: #000000 !important;
     }
   }
+
 
