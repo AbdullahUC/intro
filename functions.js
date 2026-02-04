@@ -14,17 +14,13 @@ const swiper = new Swiper('.wrapper', {
     prevEl: '.swiper-button-prev',
   },
 
-    autoplay : {
-    delay: 2000,
-    pauseOnMouseEnter: true ,
-    disableOnInteraction: true
-  },
+    
 
 
 
     breakpoints: {
     // when window width is >= 500px
-    500: {
+    320: {
       slidesPerView: 1,
       spaceBetween: 20
     },
